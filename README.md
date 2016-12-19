@@ -23,6 +23,8 @@ awesome-macos-command, As developer use your macOS terminal command statements t
 - [openssl](#openssl)
 - [mac地址](#mac地址)
 - [curl](#curl)
+- [spctl](#spctl)
+
 
 .......................
 
@@ -855,3 +857,20 @@ curl -X POST  -H 'content-type: application/json'  -d @myjsonfile.txt http://som
 # CURL在命令行直接发送JSON结构数据
 curl -H "Content-Type: application/json" -d '{"user":{"uid":123,"username":"woshishui"},"baseinfo":"afsdaa"}'  http://api.skyfox.org/project/afndemo/getTypes.do
 ```
+### spctl
+spctl manages the security assessment policy subsystem.
+### 验证APPl来自哪个渠道
+
+```
+spctl --assess --verbose /Applications/Xcode.app
+```
+### 找回允许任何来源的APP选项
+系统有一个保护叫做 Gatekeeper , 这个是防止第三方应用访问你的隐私信息的. 如果你想关掉或者开启在终端里输入
+```
+#关掉
+sudo spctl --master-disable
+#开启
+sudo spctl --master-enable
+```
+
+
