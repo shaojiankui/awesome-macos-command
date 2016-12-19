@@ -9,17 +9,20 @@ awesome-macos-command, As developer use your macOS terminal command statements t
     - [xcode-select](#xcode-select)
     - [xcodebuild](#xcodebuild)
     - [xcrun](#xcrun)
-- [Git](#Git)
-    - [SSHKEY](#SSHKEY)
+- [Git](#git)
+    - [SSH Key](#ssh_key)
     - [创建与上传](#创建与上传)
-    - [分支 branch](#分支 branch)
+    - [分支 branch](#branch)
 - [签名相关命令](#签名相关命令)
-- [RubyGems](#RubyGems)
-- [CocoaPods](#CocoaPods)
-- [Brew](#Brew)
-- [SVN](#SVN)
+- [RubyGems](#rubygems)
+- [CocoaPods](#cocoapods)
+- [Brew](#brew)
+- [SVN](#svn)
 - [openssl](#openssl)
 - [lipo](#lipo)
+- [openssl](#openssl)
+- [mac地址](#mac地址)
+- [curl](#curl)
 
 .......................
 
@@ -90,7 +93,7 @@ defaults read /Applications/Xcode.app/Contents/Info.plist DVTPlugInCompatibility
 ```
 
 ## Git
-### SSH KEY
+### SSH_KEY
 #### 生成SSH KEY
 
 ```
@@ -767,4 +770,88 @@ host www.baidu.com
 
 ```
 whois www.baidu.com
+```
+
+### curl
+#### 下载单个文件，默认将输出打印到标准输出中(STDOUT)中，其实就是终端
+
+```
+curl http://www.skyfox.org
+```
+#### 通过-o/-O选项保存下载的文件到指定的文件中
+-o：将文件保存为命令行中指定的文件名的文件中
+
+-O：使用URL中默认的文件名保存文件到本地
+
+```
+curl -o mynews.html http://dev.skyfox.org/news.html
+
+curl -O http://dev.skyfox.org/news.html
+```
+### 断点续传
+通过使用-C选项可对大文件使用断点续传功能
+
+```
+curl -C - -O http://dev.skyfox.org/news.html
+```
+### 从FTP服务器下载文件
+CURL同样支持FTP下载，若在url中指定的是某个文件路径而非具体的某个要下载的文件名，CURL则会列出该目录下的所有文件名而并非下载该目录下的所有文件
+
+```
+# 列出public_html下的所有文件夹和文件
+curl -u ftpuser:ftppass -O ftp://ftp_server/public_html/
+
+# 下载xss.php文件
+curl -u ftpuser:ftppass -O ftp://ftp_server/public_html/xss.php
+
+```
+
+### 上传文件到FTP服务器
+通过 -T 选项可将指定的本地文件上传到FTP服务器上
+
+```
+# 将myfile.txt文件上传到服务器
+curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
+
+# 同时上传多个文件
+curl -u ftpuser:ftppass -T "{file1,file2}" ftp://ftp.testserver.com
+
+# 从标准输入获取内容保存到服务器指定的文件中
+curl -u ftpuser:ftppass -T - ftp://ftp.testserver.com/myfile_1.txt
+```
+### 为CURL设置代理
+-x 选项可以为CURL添加代理功能
+```
+# 指定代理主机和端口
+curl -x proxysever.test.com:3128 http://google.co.in
+```
+### 保存与使用网站Cookie信息
+
+```
+# 将网站的cookies信息保存到sugarcookies文件中
+curl -D sugarcookies http://localhost/sugarcrm/index.php
+
+# 使用上次保存的cookie信息
+curl -b sugarcookies http://localhost/sugarcrm/index.php
+
+```
+### 传递请求数据
+默认curl使用GET方式请求数据，这种方式下直接通过URL传递数据
+可以通过 --data/-d 方式指定使用POST方式传递数据
+
+```
+# GET
+curl -u username https://api.github.com/user?access_token=XXXXXXXXXX
+ 
+# POST
+curl -u username --data "param1=value1&param2=value" https://api.github.com
+
+# 也可以指定一个文件，将该文件中的内容当作数据传递给服务器端
+curl --data @filename https://github.api.com/authorizations
+
+# CURL 发送磁盘上面的JSON文件
+curl -X POST  -H 'content-type: application/json'  -d @myjsonfile.txt http://some.url/param  
+
+# CURL在命令行直接发送JSON结构数据
+curl -H "Content-Type: application/json" -d '{"user":{"uid":123,"username":"woshishui"},"baseinfo":"afsdaa"}'  http://api.skyfox.org/project/afndemo/getTypes.do
 ```
