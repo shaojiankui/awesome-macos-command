@@ -242,6 +242,11 @@ git tag -d 1.4 //删除本地tag
 
 git push origin :refs/tags/1.4 //删除服务器tag
 ```
+#### cha所有的操作日志
+
+```
+git reflog show或git log -g
+```
 
 ## 签名相关命令
 #### 快捷查看系统中能用来对代码进行签名的证书
